@@ -1,5 +1,5 @@
 // ضع هنا رابط الـ Web App الخاص بك الذي نسخته من جوجل أبز سكريبت (المنتهي بـ /exec)
-const WEB_APP_URL = "https://docs.google.com/spreadsheets/d/1G0FQ4K8rTjKtKYhkSJas7JyIVPeAkdjzW5424gi5CkQ/edit?usp=drivesdk";
+const WEB_APP_URL = "https://api.web3forms.com/submit";
 
 // مصفوفة الأسئلة الـ 15 المتقدمة من ملف المتجهات في المستوى
 const questions = [
@@ -319,29 +319,37 @@ function submitQuiz(isAuto) {
   document.getElementById('result-stats').textContent = `عدد الإجابات الصحيحة: ${correctCount} من أصل 15 سؤالاً | الزمن المستغرق: ${timeSpentStr}`;
 
   const payload = {
-    name: studentName,
-    section: studentSection,
-    score: finalScore,
-    correctCount: correctCount,
-    timeSpent: timeSpentStr
+    access_key: "855afd4a-1b9e-4149-839d-19e4065d1ee6", // <--- ضع مفتاحك الذي وصلك على الايميل هنا بين الرمزين
+    subject: `نتيجة اختبار المتجهات - ${studentName} (${studentSection})`,
+    from_name: "منصة اختبارات الأستاذ محمود قط",
+    "اسم_الطالب_الرباعي": studentName,
+    "الشعبة": studentSection,
+    "العلامة_المستحقة": `${finalScore} من 30`,
+    "عدد_الإجابات_الصحيحة": `${correctCount} من 15`,
+    "الزمن_المستغرق": timeSpentStr
   };
 
-  // إرسال البيانات عبر fetch إلى جدول بيانات جوجل
+  // إرسال البيانات عبر fetch إلى Web3Forms
   fetch(WEB_APP_URL, {
     method: "POST",
-    mode: "no-cors",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Accept": "application/json"
     },
     body: JSON.stringify(payload)
   })
-  .then(() => {
+  .then(async (response) => {
     const statusEl = document.getElementById('sync-status');
-    statusEl.textContent = 'تم توثيق وحفظ علامتك بنجاح في سجل الأستاذ محمود قط.';
+    if (response.status === 200) {
+      statusEl.style.color = '#16a34a';
+      statusEl.textContent = 'تم توثيق وإرسال علامتك بنجاح إلى بريد الأستاذ محمود قط.';
+    } else {
+      statusEl.style.color = '#dc2626';
+      statusEl.textContent = 'حدث خطأ في الإرسال، يرجى تصوير الشاشة وإرسالها للأستاذ.';
+    }
   })
   .catch(() => {
     const statusEl = document.getElementById('sync-status');
     statusEl.style.color = '#dc2626';
-    statusEl.textContent = 'تنبيه: تعذر الاتصال بالسجل، يرجى تصوير هذه الشاشة وإرسالها للأستاذ.';
+    statusEl.textContent = 'تعذر الاتصال بالخادم، يرجى تصوير الشاشة وإرسالها للأستاذ.';
   });
-}
