@@ -1,5 +1,5 @@
 // ضع هنا رابط الـ Web App الخاص بك الذي نسخته من جوجل أبز سكريبت (المنتهي بـ /exec)
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx_QARukXPKtFQtjGS8lWYD9l7c3EcikYVPk5P8Qj0CvWSIf5loOCmgSNDrw9YCIbDS/exec";
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1fb9Royg6_EbjLycOJt3i9ZmvUXEAw7AGW8imArwcwpTwZNPirFYyC7zhpP_viVME/exec";
 
 // مصفوفة الأسئلة الـ 15 المتقدمة من ملف المتجهات في المستوى
 const questions = [
