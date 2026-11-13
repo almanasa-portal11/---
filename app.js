@@ -1,5 +1,5 @@
 // ضع هنا رابط الـ Web App الخاص بك الذي نسخته من جوجل أبز سكريبت (المنتهي بـ /exec)
-const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw1fb9Royg6_EbjLycOJt3i9ZmvUXEAw7AGW8imArwcwpTwZNPirFYyC7zhpP_viVME/exec";
+const WEB_APP_URL = "https://docs.google.com/spreadsheets/d/1G0FQ4K8rTjKtKYhkSJas7JyIVPeAkdjzW5424gi5CkQ/edit?usp=drivesdk";
 
 // مصفوفة الأسئلة الـ 15 المتقدمة من ملف المتجهات في المستوى
 const questions = [
