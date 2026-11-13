@@ -1,4 +1,4 @@
-// ضع هنا رابط الـ Web App الخاص بك الي نسخته من جوجل أبز سكريبت (المنتهي بـ /exec)
+// رابط إرسال النتائج عبر خدمة Web3Forms
 const WEB_APP_URL = "https://api.web3forms.com/submit";
 
 // مصفوفة الأسئلة الـ 15 المتقدمة من ملف المتجهات في المستوى
@@ -41,7 +41,7 @@ const questions = [
       "5",
       "9"
     ],
-    answer: 0
+    answer: 3
   },
   {
     q: "تحرك جسم من النقطة <span class='math-dir'>أ (-3 , 5)</span> إلى النقطة <span class='math-dir'>ب (0 , 8)</span>، ثم تحرك إلى النقطة <span class='math-dir'>جـ (س , 2)</span> حيث <span class='math-dir'>س > 0</span>. إذا كانت المسافة الكلية المقطوعة تساوي <span class='math-dir'>9√2</span> وحدة، فما قيمة <span class='math-dir'>س</span>؟",
@@ -180,11 +180,17 @@ function prepareQuestions() {
 }
 
 function startQuiz() {
+  try {
+    if (localStorage.getItem('vectors_quiz_done') === '1') {
+      alert('تم تسليم هذا الاختبار من هذا الجهاز مسبقاً.');
+      return;
+    }
+  } catch (e) {}
   const nameInput = document.getElementById('student-name').value.trim();
   const sectionInput = document.getElementById('student-section').value;
   let valid = true;
 
-  if (nameInput.split(/\s+/).length < 3) {
+  if (nameInput.split(/\s+/).length < 4) {
     document.getElementById('name-error').classList.remove('hidden');
     valid = false;
   } else {
@@ -255,10 +261,13 @@ function selectOption(qIndex, optIdx) {
   document.getElementById('answered-count').textContent = Object.keys(userAnswers).length;
 }
 
+let endTime = 0;
+
 function startTimer() {
   const timerEl = document.getElementById('timer');
+  endTime = Date.now() + totalSeconds * 1000;
   timerInterval = setInterval(() => {
-    totalSeconds--;
+    totalSeconds = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
     
     const mins = Math.floor(totalSeconds / 60);
     const secs = totalSeconds % 60;
@@ -288,6 +297,7 @@ function submitQuiz(isAuto) {
 
   isSubmitted = true;
   clearInterval(timerInterval);
+  try { localStorage.setItem('vectors_quiz_done', '1'); } catch (e) {}
 
   const submitBtn = document.getElementById('submit-btn');
   submitBtn.disabled = true;
@@ -353,3 +363,4 @@ function submitQuiz(isAuto) {
     statusEl.style.color = '#dc2626';
     statusEl.textContent = 'تعذر الاتصال بالخادم، يرجى تصوير الشاشة وإرسالها للأستاذ.';
   });
+}
